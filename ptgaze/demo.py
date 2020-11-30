@@ -45,6 +45,9 @@ class Demo:
     def _run_on_image(self):
         image = cv2.imread(self.config.demo.image_path)
         self._process_image(image)
+        
+        cv2.imwrite('c://backup//241//ptgaze//temp.png',self.visualizer.image)
+        
         if self.config.demo.display_on_screen:
             while True:
                 key_pressed = self._wait_key()
@@ -82,6 +85,8 @@ class Demo:
             self.gaze_estimator.camera.dist_coefficients)
 
         self.visualizer.set_image(image.copy())
+        self.visualizer.set_source_image(image.copy())
+       
         faces = self.gaze_estimator.detect_faces(undistorted)
         for face in faces:
             self.gaze_estimator.estimate_gaze(undistorted, face)
@@ -213,10 +218,29 @@ class Demo:
             raise ValueError
         if self.config.demo.use_camera:
             normalized = normalized[:, ::-1]
+            
+        #cv2.imwrite('c://backup//241//ptgaze//temp.png',normalized)
+        
         cv2.imshow('normalized', normalized)
 
     def _draw_gaze_vector(self, face: Face) -> None:
         length = self.config.demo.gaze_visualization_length
+        logger.info("Face coordinates: "+ str(face.bbox))
+        image=self.visualizer.source_image        
+        #x1,y1 = cv2.boundingRect(face.bbox[0])
+        #x2,y2 = cv2.boundingRect(face.bbox[1])
+        x1_,y1_ = face.bbox[0]
+        x2_,y2_ = face.bbox[1]
+        
+        x1,y1 = int(x1_)-30,int(y1_)-20
+        x2,y2 = int(x2_)+30, int(y2_)+20
+        
+        ROI = image[int(y1):int(y2), int(x1):int(x2)]
+        file_name='c://backup//241//temp//MPGaze_{}_{}.png'.format(x1,y1)
+        cv2.imwrite('c://backup//241//temp//MPGaze_{}_{}.png'.format(x1,y1), ROI)
+        #logger.info("Coordinates value 1: "+ str(int(x1))+" type: " + str(type(int(x1))))
+        logger.info("File name: "+ file_name)        
+        
         if self.config.mode == GazeEstimationMethod.MPIIGaze.name:
             for key in [FacePartsName.REYE, FacePartsName.LEYE]:
                 eye = getattr(face, key.name.lower())
