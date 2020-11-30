@@ -14,9 +14,14 @@ class Visualizer:
         self._camera = camera
 
         self.image: Optional[np.ndarray] = None
+        self.source_image: Optional[np.ndarray] = None
 
     def set_image(self, image: np.ndarray) -> None:
         self.image = image
+        #self.source_image = image
+        
+    def set_source_image(self, image: np.ndarray) -> None:
+        self.source_image = image 
 
     def draw_bbox(self,
                   bbox: np.ndarray,
