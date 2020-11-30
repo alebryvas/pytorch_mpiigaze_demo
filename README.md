@@ -1,3 +1,9 @@
+# This fork of MPIIGaze and MPIIFaceGaze is an extension of the original code for engagement detection 
+
+With this, we are aiming to evaluate the level of engagement based on augmenting gaze direction signals with other signals. For that purpose, the code is extended with the following features:
+- logging of detected face coordinates
+- cropping of detected faces and storing in temporary files that can be then processed further (e.g. extraction of emotions or pose)
+
 # A demo program of MPIIGaze and MPIIFaceGaze
 
 With this program, you can runs gaze estimation on images and videos.
